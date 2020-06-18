@@ -20,7 +20,10 @@ defmodule AuctionWeb.SessionController do
   end
 
   def delete(conn,_params) do
-    # todo
+    conn
+    |> clear_session()
+    |> configure_session(drop: true)
+    |> redirect(to: Routes.item_path(conn, :index))
   end
 
 end
