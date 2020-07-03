@@ -12,7 +12,8 @@ defmodule Auction do
       :world
 
   """
-  alias Auction.{Item, User, Password}
+  alias Auction.{Bid, Item, User, Password}
+  import Ecto.Query
 
   @repo Auction.Repo
 
@@ -32,6 +33,12 @@ defmodule Auction do
   
   def get_item_by(attrs) do     
     @repo.get_by(Item, attrs)   
+  end
+
+  def get_item_with_bids(id) do
+    id
+    |> get_item()
+    |> @repo.preload(bids: [:user])
   end
 
   def delete_item(%Auction.Item{} = item), do: @repo.delete(item)
@@ -57,6 +64,16 @@ defmodule Auction do
 
   def get_user(id), do: @repo.get!(User, id)
 
+  def get_bids_for_user(user) do
+    query =
+      from b in Bid,
+      where: b.user_id == ^user.id,
+      order_by: [desc: :inserted_at],
+      preload: :item,
+      limit: 10
+    @repo.all(query)
+  end
+
   def new_user, do: User.changeset_with_password(%User{})
 
   def insert_user(params) do
@@ -73,5 +90,13 @@ defmodule Auction do
         _ -> Password.dummy_verify
     end
   end
+
+  def insert_bid(params) do
+    %Bid{}
+    |> Bid.changeset(params)
+    |> @repo.insert()
+  end
+
+  def new_bid, do: Bid.changeset(%Bid{})
 
 end

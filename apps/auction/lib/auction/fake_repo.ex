@@ -32,5 +32,5 @@ defmodule Auction.FakeRepo do
                 Map.get(item, key) === map[key]       
             end)     
         end)   
-    end 
+    end
 end

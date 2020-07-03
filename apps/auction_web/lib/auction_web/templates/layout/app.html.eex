@@ -9,7 +9,7 @@
   </head>
   <body>
     <header>
-      <section class="container">
+      <!--<section class="container">
         <nav role="navigation">
           <ul>
             <li><a href="https://hexdocs.pm/phoenix/overview.html">Get Started</a></li>
@@ -18,7 +18,7 @@
         <a href="http://phoenixframework.org/" class="phx-logo">
           <img src="<%= Routes.static_path(@conn, "/images/phoenix.png") %>" alt="Phoenix Framework Logo"/>
         </a>
-      </section>
+      </section> -->
     </header>
     <div class="container" style="border-bottom: 1px solid #777777; margin-bottom: 2rem; padding-bottom: 1rem">
         <%= link "Items", to: Routes.item_path(@conn, :index) %> |
