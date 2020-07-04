@@ -13,5 +13,7 @@ defmodule Auction.Bid do
     bid
     |> cast(params, [:amount, :user_id, :item_id])
     |> validate_required([:amount, :user_id, :item_id])
+    |> assoc_constraint(:item)
+    |> assoc_constraint(:user)
   end
 end

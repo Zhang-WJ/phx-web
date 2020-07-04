@@ -54,10 +54,28 @@ let socket = new Socket("/socket", {params: {token: window.userToken}})
 // Finally, connect to the socket:
 socket.connect()
 
+let match = document.location.pathname.match(/\/items\/(\d+)$/)
+
+// only subscribe the page of items/:item_id
+if(match){
+    let itemId = match[1]
+    let channel = socket.channel(`item:${itemId}`, {})
+
+    channel.on("new_bid", data => {
+            console.log("new bid message received:", data);
+            const elem = document.getElementById("bids");
+            elem.insertAdjacentHTML("afterbegin", data.body);
+    })
+
+    channel.join()
+        .receive("ok", resp => { console.log("Joined successfully", resp) })
+        .receive("error", resp => { console.log("Unable to join", resp) })
+}
+
 // Now that you are connected, you can join channels with a topic:
-let channel = socket.channel("topic:subtopic", {})
-channel.join()
-  .receive("ok", resp => { console.log("Joined successfully", resp) })
-  .receive("error", resp => { console.log("Unable to join", resp) })
+// let channel = socket.channel("topic:subtopic", {})
+// channel.join()
+//   .receive("ok", resp => { console.log("Joined successfully", resp) })
+//   .receive("error", resp => { console.log("Unable to join", resp) })
 
 export default socket
